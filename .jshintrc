@@ -11,10 +11,10 @@
     "newcap": true,
     "noarg": true,
     "quotmark": "single",
-    "regexp": false,
+    "regexp": true,
     "undef": true,
     "unused": true,
-    "strict": false,
+    "strict": true,
     "trailing": true,
     "smarttabs": true,
     "white": true
