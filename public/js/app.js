@@ -158,7 +158,7 @@
 	'use strict';
 
 	var LoggedIn = __webpack_require__(3);
-	var Home = __webpack_require__(4);
+	var Home = __webpack_require__(13);
 	module.exports = React.createClass({
 	  displayName: 'App',
 	  componentWillMount: function componentWillMount() {
@@ -173,7 +173,6 @@
 	    $.ajaxSetup({
 	      'beforeSend': function beforeSend(xhr) {
 	        if (localStorage.getItem('userToken')) {
-	          console.log('here');
 	          xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('userToken'));
 	        }
 	      }
@@ -208,38 +207,19 @@
 
 	'use strict';
 
-	var Main = __webpack_require__(9);
+	var Main = __webpack_require__(4);
 	module.exports = React.createClass({
 	  displayName: 'LoggedIn',
 
 	  postApi: function postApi() {
-	    console.log();
-	    $.ajax({
-	      url: 'http://localhost:4568/',
-	      method: 'POST',
-	      data: JSON.stringify(this.state.profile),
-	      contentType: "application/json",
-	      success: function success() {
-	        console.log('successful data post');
-	      },
-	      error: function error() {
-	        console.log('unsuccessful data post');
-	      }
-	    });
+	    $.post('/data/user', this.state.profile);
 	  },
 
 	  getApi: function getApi() {
-	    console.log();
-	    $.ajax({
-	      url: 'http://localhost:4568/',
-	      method: 'GET',
-	      contentType: "application/json",
-	      success: function success() {
-	        console.log('successful data retrieval');
-	      },
-	      error: function error() {
-	        console.log('unsuccessful data retrieval');
-	      }
+	    //This function is useful for the eventual user profile screen.
+	    //Consider refactoring out of here when that component becomes a reality.
+	    $.getJSON('/data/user').done(function (data) {
+	      //Data stuff
 	    });
 	  },
 
@@ -282,221 +262,15 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// var Nav = require('./home/nav.jsx');
-	'use strict';
-
-	var Banner = __webpack_require__(5);
-	var TestimonialGroup = __webpack_require__(6);
-	var Footer = __webpack_require__(8);
-
-	module.exports = React.createClass({
-	  displayName: 'Home',
-	  showLock: function showLock() {
-	    this.props.lock.show();
-	  },
-
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'login-box auth0-box before' },
-	        React.createElement(
-	          'a',
-	          { onClick: this.showLock, className: 'btn btn-primary btn-lg btn-login btn-block' },
-	          'Sign In'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'row' },
-	        React.createElement(
-	          'div',
-	          { className: 'large-12 columns' },
-	          React.createElement(Banner, null),
-	          React.createElement(
-	            'div',
-	            { className: 'row' },
-	            React.createElement(
-	              'div',
-	              { className: 'large-12 columns' },
-	              React.createElement(TestimonialGroup, null)
-	            )
-	          )
-	        )
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
-	});
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = React.createClass({
-	  displayName: 'Banner',
-	  render: function render() {
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "div",
-	        { className: "row" },
-	        React.createElement(
-	          "div",
-	          { className: "large-12 hide-for-small" },
-	          React.createElement(
-	            "div",
-	            { id: "featured", "data-orbit": true },
-	            React.createElement("img", { src: "//placehold.it/1200x500&text=Slide Image 1", alt: "slide image" })
-	          )
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "row" },
-	        React.createElement(
-	          "div",
-	          { className: "large-12 columns show-for-small" },
-	          React.createElement("img", { src: "//placehold.it/1200x700&text=Mobile Header" })
-	        )
-	      ),
-	      React.createElement("br", null)
-	    );
-	  }
-
-	});
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var Testimonial = __webpack_require__(7);
-	module.exports = React.createClass({
-	  displayName: 'TestimonialGroup',
-	  render: function render() {
-	    var testArray = [{ avatar: "//placehold.it/50x50&text=[img]", user: 'Macho Man', quote: 'Oh YEEEEEAH' }, { avatar: "//placehold.it/50x50&text=[img]", user: 'Jon Snow', quote: 'Winter is Coming' }, { avatar: "//placehold.it/50x50&text=[img]", user: 'Austin Powers', quote: 'Yeah Babby Yeah' }, { avatar: "//placehold.it/50x50&text=[img]", user: 'Daryl from Walking Dead', quote: 'Sorry Brother' }];
-	    return React.createElement(
-	      'div',
-	      { className: 'row' },
-	      testArray.map(function (quote) {
-	        return React.createElement(
-	          'div',
-	          { className: 'large-3 small-12 columns', key: quote.user },
-	          React.createElement(Testimonial, { avatar: quote.avatar, name: quote.user, quote: quote.quote })
-	        );
-	      })
-	    );
-	  }
-
-	});
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = React.createClass({
-	  displayName: 'Testimonial',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'row person' },
-	        React.createElement(
-	          'div',
-	          { className: 'small-4 columns' },
-	          React.createElement('img', { className: 'img-round', src: this.props.avatar })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'small-8 columns' },
-	          React.createElement(
-	            'h5',
-	            null,
-	            this.props.name
-	          )
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'row' },
-	        React.createElement(
-	          'blockquote',
-	          null,
-	          this.props.quote
-	        )
-	      )
-	    );
-	  }
-	});
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = React.createClass({
-	  displayName: "Footer",
-	  render: function render() {
-	    return React.createElement(
-	      "footer",
-	      { className: "row" },
-	      React.createElement(
-	        "div",
-	        { className: "large-12 columns" },
-	        React.createElement("hr", null),
-	        React.createElement(
-	          "div",
-	          { className: "row" },
-	          React.createElement(
-	            "div",
-	            { className: "large-5 columns" },
-	            React.createElement(
-	              "p",
-	              null,
-	              "© Copyright Beards of Zeus."
-	            )
-	          ),
-	          React.createElement("div", { className: "large-6 columns" }),
-	          React.createElement(
-	            "div",
-	            { className: "large-1 columns" },
-	            React.createElement(
-	              "a",
-	              { href: "https://www.positivessl.com" },
-	              React.createElement("img", { src: "https://www.positivessl.com/images-new/PositiveSSL_tl_trans.png", alt: "SSL Certificate", title: "SSL Certificate", border: "0" })
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
 	//For webpack, require react components here
 	'use strict';
 
-	var Nav = __webpack_require__(10);
-	var User = __webpack_require__(11);
-	var Activities = __webpack_require__(12);
-	var AdSpace = __webpack_require__(14);
-	var Footer = __webpack_require__(8);
-	var ToggleForm = __webpack_require__(15);
+	var Nav = __webpack_require__(5);
+	var User = __webpack_require__(6);
+	var Activities = __webpack_require__(7);
+	var AdSpace = __webpack_require__(9);
+	var Footer = __webpack_require__(10);
+	var ToggleForm = __webpack_require__(11);
 
 	module.exports = React.createClass({
 	  displayName: 'Main',
@@ -538,7 +312,7 @@
 	add and remove class hitting a button*/ /*Placeholder button */
 
 /***/ },
-/* 10 */
+/* 5 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -575,7 +349,7 @@
 	});
 
 /***/ },
-/* 11 */
+/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -687,12 +461,12 @@
 	});
 
 /***/ },
-/* 12 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Activity = __webpack_require__(13);
+	var Activity = __webpack_require__(8);
 
 	module.exports = React.createClass({
 	  displayName: "Activities",
@@ -712,7 +486,7 @@
 	});
 
 /***/ },
-/* 13 */
+/* 8 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -771,7 +545,7 @@
 	});
 
 /***/ },
-/* 14 */
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -797,12 +571,56 @@
 	});
 
 /***/ },
-/* 15 */
+/* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = React.createClass({
+	  displayName: "Footer",
+	  render: function render() {
+	    return React.createElement(
+	      "footer",
+	      { className: "row" },
+	      React.createElement(
+	        "div",
+	        { className: "large-12 columns" },
+	        React.createElement("hr", null),
+	        React.createElement(
+	          "div",
+	          { className: "row" },
+	          React.createElement(
+	            "div",
+	            { className: "large-5 columns" },
+	            React.createElement(
+	              "p",
+	              null,
+	              "© Copyright Beards of Zeus."
+	            )
+	          ),
+	          React.createElement("div", { className: "large-6 columns" }),
+	          React.createElement(
+	            "div",
+	            { className: "large-1 columns" },
+	            React.createElement(
+	              "a",
+	              { href: "https://www.positivessl.com" },
+	              React.createElement("img", { src: "https://www.positivessl.com/images-new/PositiveSSL_tl_trans.png", alt: "SSL Certificate", title: "SSL Certificate", border: "0" })
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Create = __webpack_require__(16);
+	var Create = __webpack_require__(12);
 	module.exports = React.createClass({
 	  displayName: 'ToggleForm',
 	  getInitialState: function getInitialState() {
@@ -830,7 +648,7 @@
 	});
 
 /***/ },
-/* 16 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -848,35 +666,197 @@
 	      ),
 	      React.createElement(
 	        "form",
-	        null,
+	        { action: "/data/activities", method: "post" },
 	        React.createElement(
 	          "label",
 	          null,
 	          "Title: "
 	        ),
-	        React.createElement("input", { type: "text", name: "title" }),
+	        React.createElement("input", { type: "text", name: "title", ref: "title" }),
 	        React.createElement(
 	          "label",
 	          null,
 	          "Description: "
 	        ),
-	        React.createElement("textarea", { name: "description" }),
+	        React.createElement("textarea", { name: "description", ref: "description" }),
 	        React.createElement(
 	          "label",
 	          null,
 	          "Location: "
 	        ),
-	        React.createElement("input", { type: "text", name: "location" }),
+	        React.createElement("input", { type: "text", name: "location", ref: "location" }),
 	        React.createElement(
 	          "label",
 	          null,
 	          "Keywords: "
 	        ),
-	        React.createElement("input", { type: "text", name: "keywords" }),
+	        React.createElement("input", { type: "text", name: "keywords", ref: "keywords" }),
 	        React.createElement(
 	          "button",
+	          { type: "submit" },
+	          "Add Activity"
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// var Nav = require('./home/nav.jsx');
+	'use strict';
+
+	var Banner = __webpack_require__(14);
+	var TestimonialGroup = __webpack_require__(15);
+	var Footer = __webpack_require__(10);
+
+	module.exports = React.createClass({
+	  displayName: 'Home',
+	  showLock: function showLock() {
+	    this.props.lock.show();
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'login-box auth0-box before' },
+	        React.createElement(
+	          'a',
+	          { onClick: this.showLock, className: 'btn btn-primary btn-lg btn-login btn-block' },
+	          'Sign In'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
+	        React.createElement(
+	          'div',
+	          { className: 'large-12 columns' },
+	          React.createElement(Banner, null),
+	          React.createElement(
+	            'div',
+	            { className: 'row' },
+	            React.createElement(
+	              'div',
+	              { className: 'large-12 columns' },
+	              React.createElement(TestimonialGroup, null)
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = React.createClass({
+	  displayName: 'Banner',
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "div",
+	        { className: "row" },
+	        React.createElement(
+	          "div",
+	          { className: "large-12 hide-for-small" },
+	          React.createElement(
+	            "div",
+	            { id: "featured", "data-orbit": true },
+	            React.createElement("img", { src: "//placehold.it/1200x500&text=Slide Image 1", alt: "slide image" })
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "row" },
+	        React.createElement(
+	          "div",
+	          { className: "large-12 columns show-for-small" },
+	          React.createElement("img", { src: "//placehold.it/1200x700&text=Mobile Header" })
+	        )
+	      ),
+	      React.createElement("br", null)
+	    );
+	  }
+
+	});
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var Testimonial = __webpack_require__(16);
+	module.exports = React.createClass({
+	  displayName: 'TestimonialGroup',
+	  render: function render() {
+	    var testArray = [{ avatar: "//placehold.it/50x50&text=[img]", user: 'Macho Man', quote: 'Oh YEEEEEAH' }, { avatar: "//placehold.it/50x50&text=[img]", user: 'Jon Snow', quote: 'Winter is Coming' }, { avatar: "//placehold.it/50x50&text=[img]", user: 'Austin Powers', quote: 'Yeah Babby Yeah' }, { avatar: "//placehold.it/50x50&text=[img]", user: 'Daryl from Walking Dead', quote: 'Sorry Brother' }];
+	    return React.createElement(
+	      'div',
+	      { className: 'row' },
+	      testArray.map(function (quote) {
+	        return React.createElement(
+	          'div',
+	          { className: 'large-3 small-12 columns', key: quote.user },
+	          React.createElement(Testimonial, { avatar: quote.avatar, name: quote.user, quote: quote.quote })
+	        );
+	      })
+	    );
+	  }
+
+	});
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = React.createClass({
+	  displayName: 'Testimonial',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'row person' },
+	        React.createElement(
+	          'div',
+	          { className: 'small-4 columns' },
+	          React.createElement('img', { className: 'img-round', src: this.props.avatar })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'small-8 columns' },
+	          React.createElement(
+	            'h5',
+	            null,
+	            this.props.name
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
+	        React.createElement(
+	          'blockquote',
 	          null,
-	          "Submit"
+	          this.props.quote
 	        )
 	      )
 	    );
