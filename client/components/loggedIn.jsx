@@ -3,35 +3,17 @@ module.exports = React.createClass({
   displayName : 'LoggedIn',
 
   postApi: function() {
-    console.log();
-    $.ajax({
-      url: 'http://localhost:4568/',
-      method: 'POST',
-      data: JSON.stringify(this.state.profile),
-      contentType: "application/json",
-      success: function(){
-        console.log('successful data post');
-      },
-      error:function(){
-        console.log('unsuccessful data post');
-      }
-    });
+    $.post('/data/user', JSON.stringify(this.state.profile));
   },
 
 
   getApi: function() {
-    console.log();
-    $.ajax({
-      url: 'http://localhost:4568/',
-      method: 'GET',
-      contentType: "application/json",
-      success: function(){
-        console.log('successful data retrieval');
-      },
-      error:function(){
-        console.log('unsuccessful data retrieval');
-      }
-    });
+    //This function is useful for the eventual user profile screen. 
+    //Consider refactoring out of here when that component becomes a reality.
+    $.getJSON('/data/user')
+      .done(function(data){
+        //Data stuff
+      });
   },
 
   getInitialState: function() {

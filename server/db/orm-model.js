@@ -5,7 +5,11 @@ var Sequelize = require('sequelize');
 
 module.exports = function(){
   var User = db.define('Users', {
+<<<<<<< HEAD
     userId: {type: Sequelize.INTEGER, 
+=======
+    userId: {type: Sequelize.STRING, 
+>>>>>>> ee9c318318c34656731c71123c7b3f0519287bd1
       unique: true, 
       notEmpty: true, 
       notNull: true
