@@ -298,7 +298,7 @@
 	        React.createElement(
 	          'aside',
 	          { className: 'large-3 columns hide-for-small' },
-	          React.createElement(ToggleForm, null),
+	          React.createElement(ToggleForm, { user_id: this.props.profile.user_id }),
 	          React.createElement(AdSpace, null)
 	        )
 	      ),
@@ -642,7 +642,7 @@
 	        { onClick: this.onClick },
 	        this.state.showForm ? 'Cancel' : 'Add an Activity'
 	      ),
-	      this.state.showForm ? React.createElement(Create, null) : null
+	      this.state.showForm ? React.createElement(Create, { user_id: this.props.user_id }) : null
 	    );
 	  }
 	});
@@ -667,6 +667,7 @@
 	      React.createElement(
 	        "form",
 	        { action: "/data/activities", method: "post" },
+	        React.createElement("input", { type: "hidden", name: "user_id", value: this.props.user_id }),
 	        React.createElement(
 	          "label",
 	          null,
