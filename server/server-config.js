@@ -48,7 +48,8 @@ app.post('/data/activities', function(req, res){
       title: req.body.title,
       description: req.body.description,
       location: req.body.location,
-      keywords: req.body.keywords
+      keywords: req.body.keywords,
+      active: true
     })
     .save()
     .then(function(activity){
