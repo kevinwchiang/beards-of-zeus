@@ -158,7 +158,7 @@
 	'use strict';
 
 	var LoggedIn = __webpack_require__(3);
-	var Home = __webpack_require__(13);
+	var Home = __webpack_require__(15);
 	module.exports = React.createClass({
 	  displayName: 'App',
 	  componentWillMount: function componentWillMount() {
@@ -268,16 +268,13 @@
 	var Nav = __webpack_require__(5);
 	var User = __webpack_require__(6);
 	var Activities = __webpack_require__(7);
-	var AdSpace = __webpack_require__(9);
-	var Footer = __webpack_require__(10);
-	var ToggleForm = __webpack_require__(11);
+	var AdSpace = __webpack_require__(11);
+	var Footer = __webpack_require__(12);
+	var ToggleForm = __webpack_require__(13);
 
 	module.exports = React.createClass({
 	  displayName: 'Main',
 	  render: function render() {
-	    //Need to get data from db here
-	    var activityArray = [{ id: 1, avatar: "//placehold.it/80x80&text=[img]", user: "Bob Bob", description: "Now, look here, my good man. Where'd you get the coconuts? No, no, no! Yes, yes. A bit. But she's got a wart." }, { id: 2, avatar: "//placehold.it/80x80&text=[img]", user: "Jim Jim", description: "Found them? In Mercia?! The coconut's tropical! Well, she turned me into a newt. And the hat. She's a witch!" }, { id: 3, avatar: "//placehold.it/80x80&text=[img]", user: "Jill Jill", description: "A newt? Why do you think that she is a witch? What a strange person. You don't vote for kings. Did you dress her up like this? Well, I didn't vote for you. What do you mean? No, no, no! Yes, yes. A bit. But she's got a wart. Bring her forward! No, no, no! Yes, yes. A bit. But she's got a wart." }, { id: 4, avatar: "//placehold.it/80x80&text=[img]", user: "Ted Ted", description: "Well, Mercia's a temperate zone! You don't frighten us, English pig-dogs! Go and boil your bottoms, sons of a silly person! I blow my nose at you, so-called Ah-thoor Keeng, you and all your silly English K-n-n-n-n-n-n-n-niggits! You don't vote for kings. Ah, now we see the violence inherent in the system! She looks like one." }];
-
 	    return React.createElement(
 	      'div',
 	      null,
@@ -293,7 +290,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'large-6 columns' },
-	          React.createElement(Activities, { activities: activityArray })
+	          React.createElement(Activities, { user_id: this.props.profile.user_id })
 	        ),
 	        React.createElement(
 	          'aside',
@@ -352,109 +349,74 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	module.exports = React.createClass({
 	  displayName: 'User',
+
+	  componentDidMount: function componentDidMount() {
+	    this.getActivities();
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      activityList: []
+	    };
+	  },
+
+	  getActivities: function getActivities() {
+	    $.getJSON('/data/userActivities', { userID: this.props.user.user_id }).done((function (activities) {
+	      this.setState({ activityList: activities });
+	    }).bind(this));
+	  },
+
+	  toggle: function toggle(activityId) {
+	    console.log(activityId);
+	    $.post('/data/toggle', { activityId: activityId });
+	  },
+
 	  render: function render() {
+	    var that = this;
 	    return React.createElement(
-	      "div",
-	      { className: "panel radius" },
+	      'div',
+	      { className: 'panel radius' },
 	      React.createElement(
-	        "a",
-	        { href: "#" },
-	        React.createElement("img", { className: "img-round", src: this.props.user.picture })
+	        'a',
+	        { href: '#' },
+	        React.createElement('img', { className: 'img-round', src: this.props.user.picture })
 	      ),
 	      React.createElement(
-	        "h5",
+	        'h5',
 	        null,
 	        React.createElement(
-	          "a",
-	          { href: "#" },
+	          'a',
+	          { href: '#' },
 	          this.props.user.name
 	        )
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "section-container vertical-nav", "data-section": true, "data-options": "deep_linking: false; one_up: true" },
-	        React.createElement(
-	          "section",
-	          { className: "section" },
-	          React.createElement(
-	            "h5",
-	            { className: "title" },
+	        'div',
+	        { className: 'section-container vertical-nav', 'data-section': true, 'data-options': 'deep_linking: false; one_up: true' },
+	        this.state.activityList.map(function (activity) {
+	          return React.createElement(
+	            'div',
+	            { key: activity.id },
 	            React.createElement(
-	              "a",
-	              { href: "#" },
-	              "Section 1"
+	              'section',
+	              { className: 'section' },
+	              React.createElement(
+	                'h5',
+	                { className: 'title' },
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  activity.title
+	                ),
+	                React.createElement('input', { type: 'checkbox', onChange: that.toggle.bind(null, activity.id) })
+	              )
 	            )
-	          )
-	        ),
-	        React.createElement(
-	          "section",
-	          { className: "section" },
-	          React.createElement(
-	            "h5",
-	            { className: "title" },
-	            React.createElement(
-	              "a",
-	              { href: "#" },
-	              "Section 2"
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          "section",
-	          { className: "section" },
-	          React.createElement(
-	            "h5",
-	            { className: "title" },
-	            React.createElement(
-	              "a",
-	              { href: "#" },
-	              "Section 3"
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          "section",
-	          { className: "section" },
-	          React.createElement(
-	            "h5",
-	            { className: "title" },
-	            React.createElement(
-	              "a",
-	              { href: "#" },
-	              "Section 4"
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          "section",
-	          { className: "section" },
-	          React.createElement(
-	            "h5",
-	            { className: "title" },
-	            React.createElement(
-	              "a",
-	              { href: "#" },
-	              "Section 5"
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          "section",
-	          { className: "section" },
-	          React.createElement(
-	            "h5",
-	            { className: "title" },
-	            React.createElement(
-	              "a",
-	              { href: "#" },
-	              "Section 6"
-	            )
-	          )
-	        )
+	          );
+	        })
 	      )
 	    );
 	  }
@@ -470,15 +432,32 @@
 
 	module.exports = React.createClass({
 	  displayName: "Activities",
+	  componentDidMount: function componentDidMount() {
+	    this.getActivities();
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      activityList: []
+	    };
+	  },
+
+	  getActivities: function getActivities() {
+	    $.getJSON('/data/activities', { userID: this.props.user_id }).done((function (activities) {
+	      this.setState({ activityList: activities });
+	    }).bind(this));
+	  },
+
 	  render: function render() {
 	    return React.createElement(
 	      "div",
 	      null,
-	      this.props.activities.map(function (activity) {
+	      this.state.activityList.map(function (activity) {
 	        return React.createElement(
 	          "div",
 	          { key: activity.id },
-	          React.createElement(Activity, { avatar: activity.avatar, user: activity.user, description: activity.description })
+	          React.createElement(Activity, { avatar: activity.avatar, user: activity.user, description: activity.description, title: activity.title,
+	            location: activity.location, keywords: activity.keywords })
 	        );
 	      })
 	    );
@@ -487,9 +466,11 @@
 
 /***/ },
 /* 8 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+
+	var ToggleDescription = __webpack_require__(9);
 
 	module.exports = React.createClass({
 	  displayName: "Activity",
@@ -511,24 +492,31 @@
 	          React.createElement(
 	            "strong",
 	            null,
-	            this.props.user,
+	            this.props.title,
 	            ":"
 	          ),
 	          " ",
-	          this.props.description
+	          this.props.description.slice(0, 70)
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          React.createElement(
+	            "em",
+	            null,
+	            this.props.location
+	          )
+	        ),
+	        " ",
+	        React.createElement(
+	          "p",
+	          { className: "keywords" },
+	          this.props.keywords
 	        ),
 	        React.createElement(
 	          "ul",
 	          { className: "inline-list" },
-	          React.createElement(
-	            "li",
-	            null,
-	            React.createElement(
-	              "a",
-	              { href: "" },
-	              "Reply"
-	            )
-	          ),
+	          React.createElement(ToggleDescription, { description: this.props.description }),
 	          React.createElement(
 	            "li",
 	            null,
@@ -546,6 +534,60 @@
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var Description = __webpack_require__(10);
+	module.exports = React.createClass({
+	  displayName: 'ToggleDescription',
+	  getInitialState: function getInitialState() {
+	    return {
+	      showForm: false
+	    };
+	  },
+	  onClick: function onClick() {
+	    this.setState({
+	      showForm: !this.state.showForm
+	    });
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'button',
+	        { onClick: this.onClick },
+	        this.state.showForm ? 'Hide' : 'More Details'
+	      ),
+	      this.state.showForm ? React.createElement(Description, { description: this.props.description }) : null
+	    );
+	  }
+	});
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = React.createClass({
+	  displayName: 'activityDescription',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'p',
+	        null,
+	        this.props.description
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 11 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -571,7 +613,7 @@
 	});
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -615,12 +657,12 @@
 	});
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Create = __webpack_require__(12);
+	var Create = __webpack_require__(14);
 	module.exports = React.createClass({
 	  displayName: 'ToggleForm',
 	  getInitialState: function getInitialState() {
@@ -648,7 +690,7 @@
 	});
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -703,15 +745,15 @@
 	});
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// var Nav = require('./home/nav.jsx');
 	'use strict';
 
-	var Banner = __webpack_require__(14);
-	var TestimonialGroup = __webpack_require__(15);
-	var Footer = __webpack_require__(10);
+	var Banner = __webpack_require__(16);
+	var TestimonialGroup = __webpack_require__(17);
+	var Footer = __webpack_require__(12);
 
 	module.exports = React.createClass({
 	  displayName: 'Home',
@@ -756,7 +798,7 @@
 	});
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -796,12 +838,12 @@
 	});
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Testimonial = __webpack_require__(16);
+	var Testimonial = __webpack_require__(18);
 	module.exports = React.createClass({
 	  displayName: 'TestimonialGroup',
 	  render: function render() {
@@ -822,7 +864,7 @@
 	});
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
